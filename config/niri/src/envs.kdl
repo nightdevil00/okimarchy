@@ -1,0 +1,11 @@
+// Environment variable overrides for Niri
+// Note: Niri doesn't support env directives like Hyprland
+// Environment variables are typically set through uwsm or shell profiles
+//
+// This file is kept for consistency with the modular structure
+// but will not affect the Niri environment directly.
+//
+// To set environment variables for Niri sessions:
+// 1. Use ~/.config/environment.d/ files
+// 2. Set them in your shell profile (~/.zshrc, ~/.bashrc)
+// 3. Use uwsm environment configuration

@@ -1,0 +1,126 @@
+// Okimarchy Niri Keybindings
+// Matches Hyprland bindings as closely as possible
+
+binds {
+    // Help overlay
+    Mod+Shift+Slash { show-hotkey-overlay; }
+
+    // Application launches (matching Omarchy's Hyprland bindings)
+    Mod+Return { spawn "alacritty"; }                          // Terminal
+    Mod+B { spawn "omarchy-launch-browser"; }                  // Web browser
+    Mod+M { spawn "spotify"; }                                 // Music player
+    Mod+N { spawn "alacritty" "-e" "nvim"; }                   // Neovim
+    Mod+T { spawn "alacritty" "-e" "btop"; }                   // Top
+    Mod+D { spawn "alacritty" "-e" "lazydocker"; }             // Lazy Docker
+    Mod+G { spawn "signal-desktop"; }                          // Messenger
+    Mod+O { spawn "obsidian" "--disable-gpu"; }                // Obsidian
+    Mod+Slash { spawn "1password" "--quick-access"; }          // Password manager
+
+    // Media keys
+    XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "pamixer -i 5"; }
+    XF86AudioLowerVolume allow-when-locked=true { spawn-sh "pamixer -d 5"; }
+    XF86AudioMute allow-when-locked=true { spawn-sh "pamixer --toggle-mute"; }
+    XF86AudioPlay allow-when-locked=true { spawn-sh "playerctl play-pause"; }
+    XF86AudioNext allow-when-locked=true { spawn-sh "playerctl next"; }
+    XF86AudioPrev allow-when-locked=true { spawn-sh "playerctl previous"; }
+
+    // Brightness keys  
+    XF86MonBrightnessUp allow-when-locked=true { spawn "brightnessctl" "set" "+10%"; }
+    XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "set" "10%-"; }
+
+    // Window management
+    Mod+W { close-window; }                                    // Close active window
+    Ctrl+Alt+Delete { spawn "omarchy-cmd-close-all-windows"; } // Close all windows
+
+    // Focus movement (adapted for Niri's column-based layout)
+    Mod+Left { focus-column-left; }
+    Mod+Right { focus-column-right; }
+    Mod+Up { focus-window-up; }
+    Mod+Down { focus-window-down; }
+    
+    // Alternative vim-style focus movement
+    Mod+H { focus-column-left; }
+    Mod+L { focus-column-right; }
+    Mod+K { focus-window-up; }
+    Mod+J { focus-window-down; }
+
+    // Window movement (adapted for column layout)
+    Mod+Shift+Left { move-column-left; }
+    Mod+Shift+Right { move-column-right; }
+    Mod+Shift+Up { move-window-up; }
+    Mod+Shift+Down { move-window-down; }
+
+    // Alternative vim-style window movement
+    Mod+Shift+H { move-column-left; }
+    Mod+Shift+L { move-column-right; }
+    Mod+Shift+K { move-window-up; }
+    Mod+Shift+J { move-window-down; }
+
+    // Workspace switching (1-10)
+    Mod+1 { focus-workspace 1; }
+    Mod+2 { focus-workspace 2; }
+    Mod+3 { focus-workspace 3; }
+    Mod+4 { focus-workspace 4; }
+    Mod+5 { focus-workspace 5; }
+    Mod+6 { focus-workspace 6; }
+    Mod+7 { focus-workspace 7; }
+    Mod+8 { focus-workspace 8; }
+    Mod+9 { focus-workspace 9; }
+    Mod+0 { focus-workspace 10; }
+
+    // Move window to workspace
+    Mod+Shift+1 { move-column-to-workspace 1; }
+    Mod+Shift+2 { move-column-to-workspace 2; }
+    Mod+Shift+3 { move-column-to-workspace 3; }
+    Mod+Shift+4 { move-column-to-workspace 4; }
+    Mod+Shift+5 { move-column-to-workspace 5; }
+    Mod+Shift+6 { move-column-to-workspace 6; }
+    Mod+Shift+7 { move-column-to-workspace 7; }
+    Mod+Shift+8 { move-column-to-workspace 8; }
+    Mod+Shift+9 { move-column-to-workspace 9; }
+    Mod+Shift+0 { move-column-to-workspace 10; }
+
+    // Workspace navigation
+    Mod+Tab { focus-workspace-down; }
+    Mod+Shift+Tab { focus-workspace-up; }
+    
+    // Window cycling (Alt+Tab equivalent)
+    Alt+Tab { focus-window-down; }
+    Alt+Shift+Tab { focus-window-up; }
+
+    // Layout management
+    Mod+V { toggle-window-floating; }                          // Toggle floating
+    Mod+Shift+F11 { fullscreen-window; }                       // Fullscreen
+    Mod+F { maximize-column; }                                 // Maximize column
+    Mod+R { switch-preset-column-width; }                      // Resize presets
+    Mod+Shift+R { switch-preset-window-height; }               // Height presets
+
+    // Column management (unique to Niri)
+    Mod+BracketLeft { consume-or-expel-window-left; }
+    Mod+BracketRight { consume-or-expel-window-right; }
+    Mod+Comma { consume-window-into-column; }
+    Mod+Period { expel-window-from-column; }
+
+    // Window resizing 
+    Mod+Minus { set-column-width "-10%"; }
+    Mod+Equal { set-column-width "+10%"; }
+    Mod+Shift+Minus { set-window-height "-10%"; }
+    Mod+Shift+Equal { set-window-height "+10%"; }
+
+    // Utility bindings (matching Omarchy)
+    Mod+Space { spawn "walker"; }                              // App launcher
+    Mod+Alt+Space { spawn "omarchy-menu"; }                    // Omarchy menu
+    Super+Alt+L { spawn "swaylock"; }                          // Lock screen
+    Print { spawn "grim" "~/Pictures/Screenshots/screenshot-$(date +%Y%m%d_%H%M%S).png"; }
+    Shift+Print { spawn-sh "grim -g \"$(slurp)\" ~/Pictures/Screenshots/screenshot-$(date +%Y%m%d_%H%M%S).png"; }
+
+    // System controls
+    Mod+Shift+E { quit; }                                      // Exit Niri
+    Mod+Shift+P { power-off-monitors; }                        // Turn off monitors
+
+    // Mouse bindings
+    Mod+WheelScrollDown cooldown-ms=150 { focus-workspace-down; }
+    Mod+WheelScrollUp cooldown-ms=150 { focus-workspace-up; }
+    Mod+WheelScrollRight { focus-column-right; }
+    Mod+WheelScrollLeft { focus-column-left; }
+}

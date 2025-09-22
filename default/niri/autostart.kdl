@@ -1,0 +1,26 @@
+// Startup applications for Okimarchy Niri
+// Uses uwsm for proper session management, matching Hyprland implementation
+
+// Screen locking and power management (using uwsm)
+spawn-at-startup "uwsm app -- swayidle -w timeout 300 'swaylock' timeout 600 'niri msg action power-off-monitors' resume 'niri msg action power-on-monitors'"
+
+// Essential UI services (managed by uwsm)
+spawn-at-startup "uwsm app -- mako"
+spawn-at-startup "uwsm app -- waybar"
+spawn-at-startup "uwsm app -- fcitx5"
+
+// Background and visual elements (managed by uwsm)
+spawn-at-startup "uwsm app -- swaybg -i ~/.config/omarchy/current/background -m fill"
+spawn-at-startup "uwsm app -- swayosd-server"
+
+// Application launcher (managed by uwsm, with & for background)
+spawn-at-startup "uwsm app -- walker --gapplication-service &"
+
+// Authentication agent (direct spawn, not managed by uwsm for security)
+spawn-at-startup "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1"
+
+// Clipboard persistence (direct spawn)
+spawn-at-startup "wl-clip-persist --clipboard regular --all-mime-type-regex '^(?!x-kde-passwordManagerHint).+'"
+
+// First run command (direct spawn)
+spawn-at-startup "omarchy-cmd-first-run"

@@ -1,0 +1,16 @@
+// Layout configuration overrides for Niri
+// Customize gaps, focus rings, borders, etc.
+
+// Example layout customizations:
+// layout {
+//     gaps 20
+//     focus-ring {
+//         width 6
+//         active-color "#ff6b6b"
+//     }
+//     border {
+//         on
+//         width 2
+//         active-color "#4ecdc4"
+//     }
+// }

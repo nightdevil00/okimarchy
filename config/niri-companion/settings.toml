@@ -1,0 +1,33 @@
+[general]
+output_path = "~/.config/niri/config.kdl"
+
+[genconfig]
+watch_dir = "~/.config/niri/src/"
+sources = [
+  # Okimarchy defaults (read-only, don't edit these directly!)
+  "~/.local/share/omarchy/default/niri/input.kdl",
+  "~/.local/share/omarchy/default/niri/layout.kdl", 
+  "~/.local/share/omarchy/default/niri/autostart.kdl",
+  "~/.local/share/omarchy/default/niri/bindings.kdl",
+  "~/.local/share/omarchy/default/niri/windows.kdl",
+  "~/.local/share/omarchy/default/niri/workspaces.kdl",
+  "~/.local/share/omarchy/default/niri/envs.kdl",
+  "~/.config/omarchy/current/theme/niri.kdl",
+  # User overrides (edit these to customize your setup!)
+  "~/.config/niri/src/monitors.kdl",
+  "~/.config/niri/src/input.kdl", 
+  "~/.config/niri/src/bindings.kdl",
+  "~/.config/niri/src/layout.kdl",
+  "~/.config/niri/src/autostart.kdl",
+  "~/.config/niri/src/workspaces.kdl",
+  "~/.config/niri/src/envs.kdl",
+]
+
+# Required for niri-companion validation and niri-workspaces tool
+[workspaces]
+dmenu_command = "rofi -dmenu -p 'workspace'"
+task_delay = 0.6
+
+[workspaces.items]
+# Example workspace workflows (can be customized by users)
+"default" = []
