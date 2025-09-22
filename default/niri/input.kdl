@@ -1,0 +1,30 @@
+// Input device configuration for Okimarchy
+input {
+    keyboard {
+        xkb {
+            // Empty section - niri will fetch settings from org.freedesktop.locale1
+            // This matches Omarchy's approach of auto-detecting keyboard layout
+        }
+        
+        // Enable numlock on startup
+        numlock
+    }
+
+    touchpad {
+        tap
+        natural-scroll
+        // Disable while typing
+        dwt
+    }
+
+    mouse {
+        // Use system defaults
+    }
+
+    // Focus windows automatically when moving mouse into them
+    // This matches some Hyprland behaviors
+    focus-follows-mouse max-scroll-amount="0%"
+}
+
+// Screenshot path - matching Omarchy style
+screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"

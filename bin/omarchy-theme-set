@@ -26,7 +26,17 @@ omarchy-theme-bg-next
 # Restart components to apply new theme
 omarchy-restart-waybar
 omarchy-restart-swayosd
-hyprctl reload
+
+# Reload window manager configuration
+if pgrep -x "hyprland" > /dev/null; then
+    hyprctl reload
+elif pgrep -x "niri" > /dev/null; then
+    # Regenerate Niri config with new theme and reload
+    if command -v niri-genconfig >/dev/null 2>&1; then
+        niri-genconfig generate && niri msg action reload-config
+    fi
+fi
+
 pkill -SIGUSR2 btop
 makoctl reload
 

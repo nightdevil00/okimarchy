@@ -1,0 +1,20 @@
+// User workspace configuration overrides
+// Uncomment and modify the lines below to customize your workspaces
+
+// workspace "1" {
+//     name "Main"
+// }
+// workspace "2" {
+//     name "Web"  
+// }
+// workspace "3" {
+//     name "Dev"
+// }
+// workspace "4" {
+//     name "Chat"
+// }
+
+// Add more workspaces if needed:
+// workspace "11" {
+//     name "Extra"
+// }
