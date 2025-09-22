@@ -29,3 +29,17 @@ sudo chmod a+rw /etc/chromium/policies/managed
 
 sudo mkdir -p /etc/brave/policies/managed
 sudo chmod a+rw /etc/brave/policies/managed
+
+# Generate Niri configuration if Niri is selected (must be after theme setup)
+if echo "${OKIMARCHY_WM_SELECTION:-}" | grep -q "Niri"; then
+    echo "Setting up Niri configuration..."
+    
+    # Generate initial Niri config using our built-in tool
+    if command -v omarchy-niri-config-gen >/dev/null 2>&1; then
+        omarchy-niri-config-gen generate
+        echo "Niri configuration generated successfully"
+    else
+        echo "Warning: omarchy-niri-config-gen not found in PATH"
+        echo "You can manually generate the config later by running: omarchy-niri-config-gen generate"
+    fi
+fi
