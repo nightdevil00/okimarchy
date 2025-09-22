@@ -1,16 +1,17 @@
 // Startup applications for Okimarchy Niri
-// Uses a timing-aware startup script to handle uwsm environment issues
+// Uses uwsm for proper session management, matching Hyprland implementation
 
-// Essential UI services startup script (handles timing issues with uwsm)
-// This replaces individual spawn-at-startup commands that were failing due to
-// environment variables not being ready when Niri starts with uwsm
-spawn-at-startup "niri-autostart.sh"
-
-// Screen locking and power management (using uwsm, started after environment is ready)
+// Screen locking and power management (using uwsm)
 spawn-at-startup "uwsm app -- swayidle -w timeout 300 'swaylock' timeout 600 'niri msg action power-off-monitors' resume 'niri msg action power-on-monitors'"
 
-// Input method (managed by uwsm, needs special session handling)
+// Essential UI services (managed by uwsm)
+spawn-at-startup "uwsm app -- mako"
+spawn-at-startup "uwsm app -- waybar"
 spawn-at-startup "uwsm app -- fcitx5"
+
+// Background and visual elements (managed by uwsm)
+spawn-at-startup "uwsm app -- swaybg -i ~/.config/omarchy/current/background -m fill"
+spawn-at-startup "uwsm app -- swayosd-server"
 
 // Application launcher (managed by uwsm, with & for background)
 spawn-at-startup "uwsm app -- walker --gapplication-service &"
