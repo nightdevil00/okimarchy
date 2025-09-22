@@ -1,0 +1,7 @@
+// Custom startup applications for Niri
+// Add your personal startup applications here
+
+// Example custom startup applications:
+// spawn-at-startup "discord"
+// spawn-at-startup "uwsm app -- firefox"
+// spawn-at-startup "code"
