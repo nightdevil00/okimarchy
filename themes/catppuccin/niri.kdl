@@ -1,0 +1,46 @@
+// Generic Niri theme configuration with complete layout
+layout {
+    // Set gaps around windows (matches Omarchy defaults)
+    gaps 16
+
+    // Focus centered on overflow for better UX
+    center-focused-column "on-overflow"
+
+    // Column width presets (similar to Hyprland's workspace proportions)
+    preset-column-widths {
+        proportion 0.33333
+        proportion 0.5
+        proportion 0.66667
+    }
+
+    // Default new window width
+    default-column-width { proportion 0.5; }
+
+    // Focus ring configuration (matches Omarchy blue theme)
+    focus-ring {
+        width 4
+        active-color "#7fc8ff"
+        inactive-color "#505050"
+    }
+
+    // Catppuccin themed border
+    border {
+        width 2
+        active-color "#cba6f7"          // Lavender
+        inactive-color "#585b70"        // Surface2
+    }
+
+    // Drop shadow configuration
+    shadow {
+        on
+        softness 20
+        spread 2
+        offset x=0 y=4
+        color "#0007"
+    }
+
+    // Outer gaps for better integration with bars
+    struts {
+        // Will be configured by themes
+    }
+}
