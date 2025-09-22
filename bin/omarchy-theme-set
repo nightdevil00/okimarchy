@@ -32,8 +32,8 @@ if pgrep -x "hyprland" > /dev/null; then
     hyprctl reload
 elif pgrep -x "niri" > /dev/null; then
     # Regenerate Niri config with new theme and reload
-    if command -v niri-genconfig >/dev/null 2>&1; then
-        niri-genconfig generate && niri msg action reload-config
+    if command -v omarchy-niri-config-gen >/dev/null 2>&1; then
+        omarchy-niri-config-gen generate && niri msg action reload-config
     fi
 fi
 

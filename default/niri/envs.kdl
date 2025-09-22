@@ -1,4 +1,0 @@
-// Environment configuration for Okimarchy Niri
-// Note: Niri doesn't use env directives like Hyprland
-// Environment variables should be set in uwsm/env or shell profiles
-// This file is kept for consistency with the modular structure

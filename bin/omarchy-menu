@@ -188,7 +188,7 @@ show_setup_menu() {
     blueberry
     ;;
   *Power*) show_setup_power_menu ;;
-  *"Window Manager"*) present_terminal okimarchy-wm-switch ;;
+  *Window*) omarchy-launch-floating-terminal-with-presentation okimarchy-wm-switch ;;
   *Monitors*) open_in_editor ~/.config/hypr/monitors.conf ;;
   *Keybindings*) open_in_editor ~/.config/hypr/bindings.conf ;;
   *Input*) open_in_editor ~/.config/hypr/input.conf ;;

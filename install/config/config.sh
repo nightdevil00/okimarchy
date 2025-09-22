@@ -16,30 +16,17 @@ fi
 
 echo "Boot default window manager: $boot_wm"
 
-# Install Niri configuration if Niri is selected
+# Generate Niri configuration if Niri is selected
 if echo "$OKIMARCHY_WM_SELECTION" | grep -q "Niri"; then
     echo "Setting up Niri configuration..."
     
-    # Create niri-companion config directory
-    mkdir -p ~/.config/niri-companion
-    
-    # Copy niri-companion settings
-    if [ -f ~/.local/share/omarchy/config/niri-companion/settings.toml ]; then
-        cp ~/.local/share/omarchy/config/niri-companion/settings.toml ~/.config/niri-companion/
-    fi
-    
-    # Ensure ~/.local/bin is in PATH for niri-genconfig
-    if [[ ":$PATH:" != *":$HOME/.local/bin:"* ]]; then
-        export PATH="$HOME/.local/bin:$PATH"
-    fi
-    
-    # Generate initial Niri config using niri-genconfig
-    if command -v niri-genconfig >/dev/null 2>&1; then
-        niri-genconfig generate
+    # Generate initial Niri config using our built-in tool
+    if command -v omarchy-niri-config-gen >/dev/null 2>&1; then
+        omarchy-niri-config-gen generate
         echo "Niri configuration generated successfully"
     else
-        echo "Warning: niri-genconfig not found. Niri-companion should have been installed by the package manager."
-        echo "You can manually generate the config later by running: niri-genconfig generate"
+        echo "Warning: omarchy-niri-config-gen not found in PATH"
+        echo "You can manually generate the config later by running: omarchy-niri-config-gen generate"
     fi
 fi
 
