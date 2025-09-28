@@ -33,8 +33,8 @@ sudo chmod a+rw /etc/brave/policies/managed
 # Generate Niri configuration if Niri is selected (must be after theme setup)
 if echo "${OKIMARCHY_WM_SELECTION:-}" | grep -q "Niri"; then
     echo "Setting up Niri configuration..."
-    
-    # Generate initial Niri config using our built-in tool
+
+    # Generate initial Niri config using our omarchy-niri-config-gen script
     if command -v omarchy-niri-config-gen >/dev/null 2>&1; then
         omarchy-niri-config-gen generate
         echo "Niri configuration generated successfully"

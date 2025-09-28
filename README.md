@@ -16,7 +16,7 @@ Or you can switch the window manager by running `okimarchy-wm-switch` in the ter
    *Recommended*: Boot from the Arch Linux ISO and run `archinstall`.
 2. Install Omarchy by running the following command:
    ```bash
-   curl -fsSL https://raw.githubusercontent.com/cristian-fleischer/okimarchy/master/boot.sh | OMARCHY_REPO="cristian-fleischer/okimarchy" OMARCHY_REF="add-niri-as-wm-option" bash
+   curl -fsSL https://raw.githubusercontent.com/cristian-fleischer/okimarchy/master/boot.sh | OMARCHY_REPO="cristian-fleischer/okimarchy" bash
    ```
 
 ---
