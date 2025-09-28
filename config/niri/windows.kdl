@@ -18,17 +18,6 @@ window-rule {
     block-out-from "screen-capture"
 }
 
-// Terminal applications - use default column width
-window-rule {
-    match app-id=r#"^org\.wezfurlong\.wezterm$"#
-    default-column-width {}
-}
-
-window-rule {
-    match app-id="Alacritty"
-    default-column-width {}
-}
-
 // Floating windows for specific applications
 window-rule {
     match app-id="pavucontrol"
