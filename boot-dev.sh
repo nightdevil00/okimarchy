@@ -17,7 +17,7 @@ ansi_art='                 ▄▄▄
 clear
 echo -e "\n$ansi_art\n"
 
-sudo pacman -Syu --noconfirm --needed git gum
+sudo pacman -Syu --noconfirm --needed git
 
 # Use custom repo if specified, otherwise default to basecamp/omarchy
 OMARCHY_REPO="${OMARCHY_REPO:-cristian\-fleischer/okimarchy}"
