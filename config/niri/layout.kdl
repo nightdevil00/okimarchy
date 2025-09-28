@@ -1,0 +1,16 @@
+// Layout configuration for Okimarchy - moved to theme files to avoid conflicts
+// This file is kept for consistency but layout config is now in themes
+
+// Animation settings
+animations {
+    // Enable smooth animations similar to Hyprland
+    // slowdown 1.0
+}
+
+// Disable the hotkey overlay at startup (like Omarchy)
+hotkey-overlay {
+    skip-at-startup
+}
+
+// Ask clients to omit decorations when possible
+prefer-no-csd

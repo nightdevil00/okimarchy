@@ -94,6 +94,19 @@ CCODE
   rm /tmp/seamless-login.c
 fi
 
+# Determine desktop file based on window manager selection
+if [[ -z "$OKIMARCHY_WM_SELECTION" ]]; then
+    OKIMARCHY_WM_SELECTION="Hyprland (default)"
+fi
+
+# Priority: Hyprland is default when both are selected, Niri only when selected alone
+if echo "$OKIMARCHY_WM_SELECTION" | grep -q "Niri" && ! echo "$OKIMARCHY_WM_SELECTION" | grep -q "Hyprland"; then
+    DESKTOP_FILE="niri.desktop"
+    echo "Auto-login service will use Niri"
+else
+    DESKTOP_FILE="hyprland.desktop"
+    echo "Auto-login service will use Hyprland"
+fi
 if [ ! -f /etc/systemd/system/omarchy-seamless-login.service ]; then
   cat <<EOF | sudo tee /etc/systemd/system/omarchy-seamless-login.service
 [Unit]
@@ -105,7 +118,7 @@ PartOf=graphical.target
 
 [Service]
 Type=simple
-ExecStart=/usr/local/bin/seamless-login uwsm start -- hyprland.desktop
+ExecStart=/usr/local/bin/seamless-login uwsm start -- ${DESKTOP_FILE}
 Restart=always
 RestartSec=2
 StartLimitIntervalSec=30
