@@ -1,14 +1,21 @@
 # Okimarchy
 
 **Okimarchy** is an *okimari* flavor of arch forked from Omarchy.
-**Okimari** usually refers to **pre-set menus or fixed combinations** (like a lunch set, sushi set, or kaiseki-style course).
-You’re not leaving everything to the chef (*omakase*). Instead, you’re choosing from a **predefined set** (*okimari*).
+This transforms Omarchy from an *omakase* (chef's choice) to an *okimari* (pre-set menu) approach:
+- **Omakase**: Trust the chef completely (original Omarchy with Hyprland only)
+- **Okimari**: Choose from carefully curated options (Okimarchy with Hyprland or Niri)
 
-In this case you get one choice during installation. You get to choose between Hyprland and Niri as your window manager. You can even install both.
-Niri is configured to look and feel similar to Hyprland and to follow the Omarchy philosophy.
+## Key Features
 
-You can also switch between Hyprland and Niri as your window manager after installation by going to the *Omarchy Menu (Mod+Alt+Space) -> Setup -> Window Manager*. This will install the necessary packages (if not already installed) and configure the window manager to start as default on boot.
-Or you can switch the window manager by running `okimarchy-wm-switch` in the terminal.
+- **Dual Window Manager Support**: Users can now choose between Hyprland and Niri during installation. Both WMs can be installed simultaneously.
+- **Runtime Switching**: Switch between window managers after installation via the Omarchy Menu (*Omarchy Menu (Mod+Alt+Space) -> Setup -> Window Manager*) or `okimarchy-wm-switch` command
+- **Consistent Theming**: Niri configurations for all existing themes (Catppuccin, Gruvbox, Nord, Tokyo Night, etc.)
+- **Unified Keybindings**: Niri configured to match Hyprland's keybindings and behavior
+- Niri is configured to look and feel similar to Hyprland and to follow the Omarchy philosophy.
+
+**Configuration System:**
+- Modular Niri configuration files (`bindings.kdl`, `layout.kdl`, `windows.kdl`, etc.) and a dynamic Niri configuration generator (`omarchy-niri-config-gen`)
+- Theme-specific Niri configurations for all existing themes
 
 ## Installation
 
