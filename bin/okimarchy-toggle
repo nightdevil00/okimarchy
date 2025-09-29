@@ -45,10 +45,10 @@ get_origin_name() {
   local origin="$1"
   case "$origin" in
     *basecamp/omarchy*)
-      echo "Base Repository (basecamp/omarchy)"
+      echo "Omarchy Repository (basecamp/omarchy)"
       ;;
     *cristian-fleischer/okimarchy*)
-      echo "Fork Repository (cristian-fleischer/okimarchy)"
+      echo "Okimarchy Repository (including Niri) (cristian-fleischer/okimarchy)"
       ;;
     *)
       echo "Unknown Repository ($origin)"
