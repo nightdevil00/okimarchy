@@ -11,7 +11,7 @@ NC='\033[0m' # No Color
 
 OMARCHY_DIR="$HOME/.local/share/omarchy"
 BASE_REPO="https://github.com/basecamp/omarchy.git"
-FORK_REPO="https://github.com/cristian.fleischer/okimarchy.git"
+FORK_REPO="https://github.com/cristian-fleischer/okimarchy.git"
 
 print_success() {
   echo -e "${GREEN}$1${NC}"
@@ -47,8 +47,8 @@ get_origin_name() {
     *basecamp/omarchy*)
       echo "Base Repository (basecamp/omarchy)"
       ;;
-    *cristian.fleischer/okimarchy*)
-      echo "Fork Repository (cristian.fleischer/okimarchy)"
+    *cristian-fleischer/okimarchy*)
+      echo "Fork Repository (cristian-fleischer/okimarchy)"
       ;;
     *)
       echo "Unknown Repository ($origin)"
@@ -62,7 +62,7 @@ get_target_repo() {
     *basecamp/omarchy*)
       echo "$FORK_REPO"
       ;;
-    *cristian.fleischer/okimarchy*)
+    *cristian-fleischer/okimarchy*)
       echo "$BASE_REPO"
       ;;
     *)
