@@ -74,7 +74,7 @@ get_target_repo() {
 confirm_action() {
   local prompt="$1"
   echo -e "${YELLOW}$prompt [y/N]: ${NC}"
-  read -r response
+  read -r response </dev/tty
   case "$response" in
     [yY]|[yY][eE][sS])
       return 0
