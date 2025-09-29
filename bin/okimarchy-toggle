@@ -115,10 +115,10 @@ switch_repository() {
 
   # Reset to match the remote repository
   print_info "Updating code to match new repository..."
-  local default_branch=$(git -C "$OMARCHY_DIR" symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@' || echo "main")
+  local default_branch=$(git -C "$OMARCHY_DIR" symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@' || echo "master")
 
   # Try common default branch names
-  for branch in "$default_branch" "main" "master"; do
+  for branch in "$default_branch" "master"; do
     if git -C "$OMARCHY_DIR" show-ref --verify --quiet "refs/remotes/origin/$branch"; then
       git -C "$OMARCHY_DIR" reset --hard "origin/$branch"
       git -C "$OMARCHY_DIR" checkout "$branch" 2>/dev/null || git -C "$OMARCHY_DIR" checkout -b "$branch" "origin/$branch"
