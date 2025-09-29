@@ -1,0 +1,215 @@
+#!/bin/bash
+
+set -e
+
+GREEN='\033[0;32m'
+RED='\033[0;31m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+BOLD='\033[1m'
+NC='\033[0m' # No Color
+
+OMARCHY_DIR="$HOME/.local/share/omarchy"
+BASE_REPO="https://github.com/basecamp/omarchy.git"
+FORK_REPO="https://github.com/cristian.fleischer/okimarchy.git"
+
+print_success() {
+  echo -e "${GREEN}$1${NC}"
+}
+
+print_error() {
+  echo -e "${RED}$1${NC}"
+}
+
+print_info() {
+  echo -e "${YELLOW}$1${NC}"
+}
+
+print_header() {
+  echo -e "${BOLD}${BLUE}$1${NC}"
+}
+
+print_warning() {
+  echo -e "${RED}${BOLD}⚠️  $1${NC}"
+}
+
+get_current_origin() {
+  if [ -d "$OMARCHY_DIR" ]; then
+    git -C "$OMARCHY_DIR" remote get-url origin 2>/dev/null || echo ""
+  else
+    echo ""
+  fi
+}
+
+get_origin_name() {
+  local origin="$1"
+  case "$origin" in
+    *basecamp/omarchy*)
+      echo "Base Repository (basecamp/omarchy)"
+      ;;
+    *cristian.fleischer/okimarchy*)
+      echo "Fork Repository (cristian.fleischer/okimarchy)"
+      ;;
+    *)
+      echo "Unknown Repository ($origin)"
+      ;;
+  esac
+}
+
+get_target_repo() {
+  local current="$1"
+  case "$current" in
+    *basecamp/omarchy*)
+      echo "$FORK_REPO"
+      ;;
+    *cristian.fleischer/okimarchy*)
+      echo "$BASE_REPO"
+      ;;
+    *)
+      echo ""
+      ;;
+  esac
+}
+
+confirm_action() {
+  local prompt="$1"
+  echo -e "${YELLOW}$prompt [y/N]: ${NC}"
+  read -r response
+  case "$response" in
+    [yY]|[yY][eE][sS])
+      return 0
+      ;;
+    *)
+      return 1
+      ;;
+  esac
+}
+
+backup_current_state() {
+  print_info "Creating backup of current state..."
+
+  # Check if there are uncommitted changes
+  if ! git -C "$OMARCHY_DIR" diff --quiet || ! git -C "$OMARCHY_DIR" diff --cached --quiet; then
+    print_info "Stashing uncommitted changes..."
+    git -C "$OMARCHY_DIR" stash push -u -m "Auto-stash before repository switch - $(date)"
+  fi
+
+  # Create a backup branch with current state
+  local backup_branch="backup-before-switch-$(date +%Y%m%d-%H%M%S)"
+  git -C "$OMARCHY_DIR" branch "$backup_branch" 2>/dev/null || true
+  print_info "Created backup branch: $backup_branch"
+}
+
+switch_repository() {
+  local target_repo="$1"
+  local target_name="$2"
+
+  print_info "Switching to $target_name..."
+
+  # Change remote origin
+  git -C "$OMARCHY_DIR" remote set-url origin "$target_repo"
+
+  # Fetch from new repository
+  print_info "Fetching from new repository..."
+  git -C "$OMARCHY_DIR" fetch origin
+
+  # Reset to match the remote repository
+  print_info "Updating code to match new repository..."
+  local default_branch=$(git -C "$OMARCHY_DIR" symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@' || echo "main")
+
+  # Try common default branch names
+  for branch in "$default_branch" "main" "master"; do
+    if git -C "$OMARCHY_DIR" show-ref --verify --quiet "refs/remotes/origin/$branch"; then
+      git -C "$OMARCHY_DIR" reset --hard "origin/$branch"
+      git -C "$OMARCHY_DIR" checkout "$branch" 2>/dev/null || git -C "$OMARCHY_DIR" checkout -b "$branch" "origin/$branch"
+      break
+    fi
+  done
+
+  print_success "Successfully switched to $target_name"
+}
+
+main() {
+  print_header "🔄 Okimarchy Repository Toggle"
+  echo ""
+
+  # Check if omarchy directory exists
+  if [ ! -d "$OMARCHY_DIR" ]; then
+    print_error "Omarchy directory not found at $OMARCHY_DIR"
+    print_info "Please install Omarchy first or ensure it's located at the expected path."
+    exit 1
+  fi
+
+  # Check if it's a git repository
+  if [ ! -d "$OMARCHY_DIR/.git" ]; then
+    print_error "The omarchy directory is not a git repository."
+    exit 1
+  fi
+
+  # Get current origin
+  current_origin=$(get_current_origin)
+  if [ -z "$current_origin" ]; then
+    print_error "Could not determine current git remote origin."
+    exit 1
+  fi
+
+  current_name=$(get_origin_name "$current_origin")
+  target_repo=$(get_target_repo "$current_origin")
+
+  if [ -z "$target_repo" ]; then
+    print_error "Current repository origin is not recognized:"
+    print_error "  $current_origin"
+    print_info "This script only works with:"
+    print_info "  • $BASE_REPO"
+    print_info "  • $FORK_REPO"
+    exit 1
+  fi
+
+  target_name=$(get_origin_name "$target_repo")
+
+  # Display current status
+  print_info "Current repository: $current_name"
+  print_info "Target repository:  $target_name"
+  echo ""
+
+  # Show warning and ask for confirmation
+  print_warning "IMPORTANT: This will change your git repository origin and update all code!"
+  print_warning "Current uncommitted changes will be stashed and a backup branch will be created."
+  echo ""
+  print_info "This operation will:"
+  print_info "  1. Stash any uncommitted changes"
+  print_info "  2. Create a backup branch with current state"
+  print_info "  3. Change git remote origin to: $target_repo"
+  print_info "  4. Fetch and reset to match the new repository"
+  echo ""
+
+  if ! confirm_action "Do you want to proceed with switching repositories?"; then
+    print_info "Operation cancelled."
+    exit 0
+  fi
+
+  echo ""
+
+  # Perform the switch
+  backup_current_state
+  switch_repository "$target_repo" "$target_name"
+
+  echo ""
+  print_success "✅ Repository switch completed successfully!"
+  print_info "You are now using: $target_name"
+
+  # Show information about stashed changes
+  stash_count=$(git -C "$OMARCHY_DIR" stash list | wc -l)
+  if [ "$stash_count" -gt 0 ]; then
+    echo ""
+    print_info "📦 You have $stash_count stashed change(s). Use 'git stash pop' to restore them if needed."
+  fi
+
+  # Show backup branches
+  backup_branches=$(git -C "$OMARCHY_DIR" branch --list "backup-before-switch-*" | wc -l)
+  if [ "$backup_branches" -gt 0 ]; then
+    print_info "🔄 Backup branch(es) created for your previous state."
+  fi
+}
+
+main "$@"
