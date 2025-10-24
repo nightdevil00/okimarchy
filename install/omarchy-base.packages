@@ -36,6 +36,7 @@ elephant-todo
 elephant-unicode
 elephant-websearch
 evince
+expac
 eza
 fastfetch
 fcitx5
@@ -59,6 +60,7 @@ imagemagick
 impala
 imv
 inetutils
+inxi
 iwd
 jq
 kdenlive
@@ -126,7 +128,7 @@ unzip
 uwsm
 walker
 waybar
-wayfreeze-git
+wayfreeze
 whois
 wireless-regdb
 wiremix
