@@ -1,60 +1,99 @@
 // Okimarchy Niri Keybindings
-// Matches Hyprland bindings as closely as possible
+// Mirrors Hyprland defaults where possible
 
 binds {
-    // Help overlay
-    Mod+Shift+Slash { show-hotkey-overlay; }
+    // Help and menus
+    Mod+K { spawn "omarchy-menu-keybindings"; }
+    Mod+Shift+K { show-hotkey-overlay; }
 
-    // Application launches (matching Omarchy's Hyprland bindings)
-    Mod+Return { spawn "alacritty"; }                          // Terminal
-    Mod+B { spawn "omarchy-launch-browser"; }                  // Web browser
-    Mod+M { spawn "spotify"; }                                 // Music player
-    Mod+N { spawn "alacritty" "-e" "nvim"; }                   // Neovim
-    Mod+T { spawn "alacritty" "-e" "btop"; }                   // Top
-    Mod+D { spawn "alacritty" "-e" "lazydocker"; }             // Lazy Docker
-    Mod+G { spawn "signal-desktop"; }                          // Messenger
-    Mod+O { spawn "obsidian" "--disable-gpu"; }                // Obsidian
-    Mod+Slash { spawn "1password" "--quick-access"; }          // Password manager
+    // App launcher and menus
+    Mod+Space { spawn "omarchy-launch-walker"; }
+    Mod+Ctrl+E { spawn "omarchy-launch-walker" "-m" "symbols"; }
+    Mod+Alt+Space { spawn "omarchy-menu"; }
+    Mod+Escape { spawn "omarchy-menu" "system"; }
+    XF86PowerOff allow-when-locked=true { spawn "omarchy-menu" "system"; }
 
-    // Media keys
-    XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "pamixer -i 5"; }
-    XF86AudioLowerVolume allow-when-locked=true { spawn-sh "pamixer -d 5"; }
-    XF86AudioMute allow-when-locked=true { spawn-sh "pamixer --toggle-mute"; }
-    XF86AudioPlay allow-when-locked=true { spawn-sh "playerctl play-pause"; }
-    XF86AudioNext allow-when-locked=true { spawn-sh "playerctl next"; }
-    XF86AudioPrev allow-when-locked=true { spawn-sh "playerctl previous"; }
+    // Theme and bar controls
+    Mod+Shift+Space { spawn "omarchy-toggle-waybar"; }
+    Mod+Ctrl+Space { spawn "omarchy-theme-bg-next"; }
+    Mod+Shift+Ctrl+Space { spawn "omarchy-menu" "theme"; }
 
-    // Brightness keys  
-    XF86MonBrightnessUp allow-when-locked=true { spawn "brightnessctl" "set" "+10%"; }
-    XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "set" "10%-"; }
+    // Notifications (mako)
+    Mod+Comma { spawn "makoctl" "dismiss"; }
+    Mod+Shift+Comma { spawn "makoctl" "dismiss" "--all"; }
+    Mod+Ctrl+Comma { spawn-sh "makoctl mode -t do-not-disturb && makoctl mode | grep -q 'do-not-disturb' && notify-send \"Silenced notifications\" || notify-send \"Enabled notifications\""; }
+
+    // Utilities
+    XF86Calculator { spawn "gnome-calculator"; }
+
+    // Media and brightness (with OSD)
+    XF86AudioRaiseVolume allow-when-locked=true { spawn "swayosd-client" "--output-volume" "raise"; }
+    XF86AudioLowerVolume allow-when-locked=true { spawn "swayosd-client" "--output-volume" "lower"; }
+    XF86AudioMute allow-when-locked=true { spawn "swayosd-client" "--output-volume" "mute-toggle"; }
+    XF86AudioMicMute allow-when-locked=true { spawn "swayosd-client" "--input-volume" "mute-toggle"; }
+    XF86AudioPlay allow-when-locked=true { spawn "swayosd-client" "--playerctl" "play-pause"; }
+    XF86AudioNext allow-when-locked=true { spawn "swayosd-client" "--playerctl" "next"; }
+    XF86AudioPrev allow-when-locked=true { spawn "swayosd-client" "--playerctl" "previous"; }
+
+    XF86MonBrightnessUp allow-when-locked=true { spawn "swayosd-client" "--brightness" "raise"; }
+    XF86MonBrightnessDown allow-when-locked=true { spawn "swayosd-client" "--brightness" "lower"; }
+    Alt+XF86AudioRaiseVolume allow-when-locked=true { spawn "swayosd-client" "--output-volume" "+1"; }
+    Alt+XF86AudioLowerVolume allow-when-locked=true { spawn "swayosd-client" "--output-volume" "-1"; }
+    Alt+XF86MonBrightnessUp allow-when-locked=true { spawn "swayosd-client" "--brightness" "+1"; }
+    Alt+XF86MonBrightnessDown allow-when-locked=true { spawn "swayosd-client" "--brightness" "-1"; }
+
+    Mod+XF86AudioMute { spawn "omarchy-cmd-audio-switch"; }
+
+    // Screenshots and screen recording
+    Print { spawn "omarchy-cmd-screenshot"; }
+    Shift+Print { spawn "omarchy-cmd-screenshot" "smart" "clipboard"; }
+    Alt+Print { spawn "omarchy-menu" "screenrecord"; }
+    Mod+Print { spawn-sh "pkill hyprpicker || hyprpicker -a"; }
+
+    // Idle and nightlight toggles
+    Mod+Ctrl+I { spawn "omarchy-toggle-idle"; }
+    Mod+Ctrl+N { spawn "omarchy-toggle-nightlight"; }
+
+    // Application launches (mirroring Hyprland user bindings)
+    Mod+Return { spawn-sh "dir=$(omarchy-cmd-terminal-cwd); exec uwsm-app -- \"$TERMINAL\" --working-directory=\"$dir\""; }
+    Mod+Shift+F { spawn "uwsm-app" "--" "nautilus" "--new-window"; }
+    Mod+Shift+B { spawn "omarchy-launch-browser"; }
+    Mod+Shift+Alt+B { spawn "omarchy-launch-browser" "--private"; }
+    Mod+Shift+M { spawn "omarchy-launch-or-focus" "spotify"; }
+    Mod+Shift+N { spawn "omarchy-launch-editor"; }
+    Mod+Shift+T { spawn "alacritty" "-e" "btop"; }
+    Mod+Shift+D { spawn "alacritty" "-e" "lazydocker"; }
+    Mod+Shift+G { spawn "omarchy-launch-or-focus" "signal" "uwsm-app -- signal-desktop"; }
+    Mod+Shift+O { spawn "omarchy-launch-or-focus" "^obsidian$" "uwsm-app -- obsidian -disable-gpu --enable-wayland-ime"; }
+    Mod+Shift+Slash { spawn "uwsm-app" "--" "1password"; }
+    Mod+Shift+A { spawn "omarchy-launch-webapp" "https://chatgpt.com"; }
+    Mod+Shift+Alt+A { spawn "omarchy-launch-webapp" "https://grok.com"; }
+    Mod+Shift+C { spawn "omarchy-launch-webapp" "https://app.hey.com/calendar/weeks/"; }
+    Mod+Shift+E { spawn "omarchy-launch-webapp" "https://app.hey.com"; }
+    Mod+Shift+Y { spawn "omarchy-launch-webapp" "https://youtube.com/"; }
+    Mod+Shift+Alt+G { spawn "omarchy-launch-or-focus-webapp" "WhatsApp" "https://web.whatsapp.com/"; }
+    Mod+Shift+Ctrl+G { spawn "omarchy-launch-or-focus-webapp" "Google Messages" "https://messages.google.com/web/conversations"; }
+    Mod+Shift+X { spawn "omarchy-launch-webapp" "https://x.com/"; }
+    Mod+Shift+Alt+X { spawn "omarchy-launch-webapp" "https://x.com/compose/post"; }
+
+    // Clipboard menu
+    Mod+Ctrl+V { spawn "omarchy-launch-walker" "-m" "clipboard"; }
 
     // Window management
-    Mod+W { close-window; }                                    // Close active window
-    Ctrl+Alt+Delete { spawn "omarchy-cmd-close-all-windows"; } // Close all windows
+    Mod+W { close-window; }
+    Ctrl+Alt+Delete { spawn "omarchy-cmd-close-all-windows"; }
 
-    // Focus movement (adapted for Niri's column-based layout)
+    // Focus movement (arrows)
     Mod+Left { focus-column-left; }
     Mod+Right { focus-column-right; }
     Mod+Up { focus-window-up; }
     Mod+Down { focus-window-down; }
-    
-    // Alternative vim-style focus movement
-    Mod+H { focus-column-left; }
-    Mod+L { focus-column-right; }
-    Mod+K { focus-window-up; }
-    Mod+J { focus-window-down; }
 
-    // Window movement (adapted for column layout)
+    // Window movement
     Mod+Shift+Left { move-column-left; }
     Mod+Shift+Right { move-column-right; }
     Mod+Shift+Up { move-window-up; }
     Mod+Shift+Down { move-window-down; }
-
-    // Alternative vim-style window movement
-    Mod+Shift+H { move-column-left; }
-    Mod+Shift+L { move-column-right; }
-    Mod+Shift+K { move-window-up; }
-    Mod+Shift+J { move-window-down; }
 
     // Workspace switching (1-10)
     Mod+1 { focus-workspace 1; }
@@ -83,40 +122,34 @@ binds {
     // Workspace navigation
     Mod+Tab { focus-workspace-down; }
     Mod+Shift+Tab { focus-workspace-up; }
-    
+
     // Window cycling (Alt+Tab equivalent)
     Alt+Tab { focus-window-down; }
     Alt+Shift+Tab { focus-window-up; }
 
     // Layout management
-    Mod+V { toggle-window-floating; }                          // Toggle floating
-    Mod+Shift+F11 { fullscreen-window; }                       // Fullscreen
-    Mod+F { maximize-column; }                                 // Maximize column
-    Mod+R { switch-preset-column-width; }                      // Resize presets
-    Mod+Shift+R { switch-preset-window-height; }               // Height presets
+    Mod+T { toggle-window-floating; }
+    Mod+F { fullscreen-window; }
+    Mod+Ctrl+F { maximize-column; }
+    Mod+Alt+F { set-column-width "100%"; }
+    Mod+R { switch-preset-column-width; }
+    Mod+Shift+R { switch-preset-window-height; }
 
     // Column management (unique to Niri)
     Mod+BracketLeft { consume-or-expel-window-left; }
     Mod+BracketRight { consume-or-expel-window-right; }
-    Mod+Comma { consume-window-into-column; }
-    Mod+Period { expel-window-from-column; }
+    Mod+Alt+Comma { consume-window-into-column; }
+    Mod+Alt+Period { expel-window-from-column; }
 
-    // Window resizing 
+    // Window resizing
     Mod+Minus { set-column-width "-10%"; }
     Mod+Equal { set-column-width "+10%"; }
     Mod+Shift+Minus { set-window-height "-10%"; }
     Mod+Shift+Equal { set-window-height "+10%"; }
 
-    // Utility bindings (matching Omarchy)
-    Mod+Space { spawn "walker"; }                              // App launcher
-    Mod+Alt+Space { spawn "omarchy-menu"; }                    // Omarchy menu
-    Super+Alt+L { spawn "swaylock"; }                          // Lock screen
-    Print { spawn "grim" "~/Pictures/Screenshots/screenshot-$(date +%Y%m%d_%H%M%S).png"; }
-    Shift+Print { spawn-sh "grim -g \"$(slurp)\" ~/Pictures/Screenshots/screenshot-$(date +%Y%m%d_%H%M%S).png"; }
-
     // System controls
-    Mod+Shift+E { quit; }                                      // Exit Niri
-    Mod+Shift+P { power-off-monitors; }                        // Turn off monitors
+    Mod+Shift+Q { quit; }
+    Mod+Shift+P { power-off-monitors; }
 
     // Mouse bindings
     Mod+WheelScrollDown cooldown-ms=150 { focus-workspace-down; }

@@ -18,13 +18,14 @@ layout {
 
     // Focus ring configuration (matches Omarchy blue theme)
     focus-ring {
-        width 4
-        active-color "#7fc8ff"
-        inactive-color "#505050"
+        width 2
+        active-color "#33ccff"          // Cyan blue
+        inactive-color "#44475a"        // Dark gray
     }
 
     // Tokyo Night themed border
     border {
+        off
         width 2
         active-color "#33ccff"          // Cyan blue
         inactive-color "#44475a"        // Dark gray

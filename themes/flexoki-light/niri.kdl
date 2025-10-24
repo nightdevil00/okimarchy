@@ -16,19 +16,19 @@ layout {
     // Default new window width
     default-column-width { proportion 0.5; }
 
-    // Focus ring colors (Nord)
+    // Focus ring configuration (matches Omarchy blue theme)
     focus-ring {
         width 2
-        active-color "#D8DEE9"
-        inactive-color "#4C566A"
+        active-color "#205EA6"          // Flexoki accent blue
+        inactive-color "#CECDC3"        // Flexoki subtle gray
     }
 
-    // Border colors (Nord)
+    // Window border colors (Flexoki Light)
     border {
         off
         width 2
-        active-color "#D8DEE9"
-        inactive-color "#4C566A"
+        active-color "#205EA6"          // Flexoki accent blue
+        inactive-color "#CECDC3"        // Flexoki subtle gray
     }
 
     // Drop shadow configuration

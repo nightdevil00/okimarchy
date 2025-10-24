@@ -16,18 +16,19 @@ layout {
     // Default new window width
     default-column-width { proportion 0.5; }
 
-    // Focus ring configuration (matches Omarchy blue theme)
+    // Focus ring colors (Matte Black)
     focus-ring {
-        width 4
-        active-color "#7fc8ff"
-        inactive-color "#505050"
+        width 2
+        active-color "#8A8A8D"
+        inactive-color "#595959"
     }
 
-    // Generic theme border (override in specific themes)
+    // Border colors (Matte Black)
     border {
+        off
         width 2
-        active-color "#6495ed"          // Cornflower blue
-        inactive-color "#808080"        // Gray
+        active-color "#8A8A8D"
+        inactive-color "#595959"
     }
 
     // Drop shadow configuration

@@ -16,18 +16,19 @@ layout {
     // Default new window width
     default-column-width { proportion 0.5; }
 
-    // Focus ring configuration (matches Omarchy blue theme)
+    // Focus ring colors (Rose Pine)
     focus-ring {
-        width 4
-        active-color "#7fc8ff"
-        inactive-color "#505050"
+        width 2
+        active-color "#575279"
+        inactive-color "#9893a5"
     }
 
-    // Generic theme border (override in specific themes)
+    // Border colors (Rose Pine)
     border {
+        off
         width 2
-        active-color "#6495ed"          // Cornflower blue
-        inactive-color "#808080"        // Gray
+        active-color "#575279"
+        inactive-color "#9893a5"
     }
 
     // Drop shadow configuration

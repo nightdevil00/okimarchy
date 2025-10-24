@@ -73,47 +73,6 @@ install_wm_packages() {
         fi
     fi
 }
-
-# Update the systemd auto-login service to use the selected WM
-update_autologin_service() {
-    local wm="$1"
-    local service_file="/etc/systemd/system/omarchy-seamless-login.service"
-
-    if [[ ! -f "$service_file" ]]; then
-        echo_warning "Omarchy auto-login service not found. You may need to manually start the WM."
-        return
-    fi
-
-    local exec_command
-    case "$wm" in
-        "hyprland")
-            exec_command="/usr/local/bin/seamless-login uwsm start -- hyprland.desktop"
-            ;;
-        "niri")
-            # Use uwsm to start Niri (consistent with Hyprland approach)
-            exec_command="/usr/local/bin/seamless-login uwsm start -- niri.desktop"
-            ;;
-        *)
-            echo_error "Unknown window manager for service update: $wm"
-            return 1
-            ;;
-    esac
-
-    echo_info "Updating auto-login service to use $wm..."
-
-    # Update the ExecStart line in the service file
-    if sudo sed -i "s|^ExecStart=.*|ExecStart=$exec_command|" "$service_file"; then
-        echo_success "Auto-login service updated"
-
-        # Reload systemd daemon
-        sudo systemctl daemon-reload
-        echo_success "Systemd daemon reloaded"
-    else
-        echo_error "Failed to update auto-login service"
-        return 1
-    fi
-}
-
 # Setup configuration for the target WM
 setup_wm_config() {
     local wm="$1"
@@ -121,8 +80,6 @@ setup_wm_config() {
     case "$wm" in
         "hyprland")
             echo_info "Hyprland configuration is already set up"
-            # Update auto-login service to use Hyprland
-            update_autologin_service "$wm"
             ;;
         "niri")
             echo_info "Setting up Niri configuration..."
@@ -139,9 +96,6 @@ setup_wm_config() {
                 echo_warning "omarchy-niri-config-gen not found in PATH"
                 echo_info "Niri configuration may need to be generated manually"
             fi
-
-            # Update auto-login service to use Niri
-            update_autologin_service "$wm"
             ;;
         *)
             echo_error "Unknown window manager: $wm"
@@ -149,7 +103,52 @@ setup_wm_config() {
             ;;
     esac
 }
+# Ensure SDDM autologin matches selected WM (no session entry changes)
+set_autologin_session() {
+    local wm="$1" session_id
+    case "$wm" in
+        hyprland) session_id="hyprland-uwsm" ;;
+        niri)
+            # Ensure a dedicated UWSM-backed Niri session entry exists
+            if command -v sudo >/dev/null 2>&1; then
+                sudo mkdir -p /usr/share/wayland-sessions
+                if [[ ! -f /usr/share/wayland-sessions/niri-uwsm.desktop ]]; then
+                    sudo tee /usr/share/wayland-sessions/niri-uwsm.desktop >/dev/null <<'DESKTOP'
+[Desktop Entry]
+Name=Niri
+Comment=Start Niri via UWSM
+Exec=uwsm start -- niri --session
+Type=Application
+DesktopNames=niri
+DESKTOP
+                fi
+            fi
+            session_id="niri-uwsm"
+            ;;
+        *) echo_error "Unknown WM: $wm"; return 1 ;;
+    esac
 
+    if ! command -v sudo >/dev/null 2>&1; then
+        echo_warning "sudo not available; skipping SDDM autologin update"
+        return 0
+    fi
+
+    sudo mkdir -p /etc/sddm.conf.d
+    if [[ -f /etc/sddm.conf.d/autologin.conf ]]; then
+        sudo sed -i "s/^Session=.*/Session=${session_id}/" /etc/sddm.conf.d/autologin.conf
+    else
+        sudo tee /etc/sddm.conf.d/autologin.conf >/dev/null <<EOF
+[Autologin]
+User=$USER
+Session=${session_id}
+
+[Theme]
+Current=breeze
+EOF
+    fi
+
+    echo_success "SDDM autologin set to: ${session_id}"
+}
 # Main switching function
 switch_to_wm() {
     local target_wm="$1"
@@ -170,36 +169,25 @@ switch_to_wm() {
         echo_error "Failed to setup configuration for $target_wm. Aborting switch."
         return 1
     fi
-
+    # Update login session to match selection
+    if ! set_autologin_session "$target_wm"; then
+        echo_error "Failed to update login session for $target_wm. Aborting switch."
+        return 1
+    fi
     # Inform user about session restart
     echo_success "Window manager switch setup completed!"
-    echo_info "To complete the switch:"
-    echo "  1. Save your work and close applications"
-    echo "  2. Reboot or restart the session"
+    echo_info "A reboot is required to finalize the switch and boot into the new WM."
     echo ""
-
-    # Ask if user wants to logout now
-    echo ""
-    if gum confirm "Would you like to logout now to complete the switch?"; then
-        case "$current_session" in
-            "hyprland")
-                hyprctl dispatch exit
-                ;;
-            "niri")
-                niri msg action quit
-                ;;
-            *)
-                echo_info "Please logout manually to complete the switch"
-                ;;
-        esac
+    if gum confirm "Reboot now to complete the switch?"; then
+        sudo systemctl reboot
     else
-        echo_info "Switch will be completed on your next logout/login"
+        echo_info "Please reboot when convenient to apply changes"
     fi
 }
 
 # Main script
 main() {
-    echo -e "\n🖥️ Okimarchy Window Manager Switcher\n"
+    echo -e "\n🗗 Okimarchy Window Manager Switcher\n"
 
     # Check current session
     local current_session

@@ -15,14 +15,33 @@ omarchy-pkg-add sddm libsecret gnome-keyring || error_exit
 
 sudo mkdir -p /etc/sddm.conf.d
 
-cat <<EOF | sudo tee /etc/sddm.conf.d/autologin.conf
+# Ensure Niri (uwsm) session entry exists
+sudo mkdir -p /usr/share/wayland-sessions
+if [ ! -f /usr/share/wayland-sessions/niri-uwsm.desktop ]; then
+  sudo tee /usr/share/wayland-sessions/niri-uwsm.desktop >/dev/null <<'DESKTOP'
+[Desktop Entry]
+Name=Niri (uwsm)
+Comment=Start Niri via UWSM
+Exec=uwsm start -- niri --session
+Type=Application
+DesktopNames=niri
+DESKTOP
+fi
+
+# Choose session based on selected WM(s)
+session="hyprland-uwsm"
+if echo "${OKIMARCHY_WM_SELECTION:-}" | grep -q "Niri"; then
+  session="niri-uwsm"
+fi
+
+cat <<EOF2 | sudo tee /etc/sddm.conf.d/autologin.conf
 [Autologin]
 User=$USER
-Session=hyprland-uwsm
+Session=$session
 
 [Theme]
 Current=breeze
-EOF
+EOF2
 
 sudo systemctl disable omarchy-seamless-login.service
 sudo systemctl unmask plymouth-quit-wait.service

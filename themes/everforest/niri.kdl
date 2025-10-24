@@ -16,18 +16,19 @@ layout {
     // Default new window width
     default-column-width { proportion 0.5; }
 
-    // Focus ring configuration (matches Omarchy blue theme)
+    // Focus ring colors (Everforest)
     focus-ring {
-        width 4
-        active-color "#7fc8ff"
-        inactive-color "#505050"
+        width 2
+        active-color "#d3c6aa"
+        inactive-color "#4f5b58"
     }
 
-    // Generic theme border (override in specific themes)
+    // Border colors (Everforest)
     border {
+        off
         width 2
-        active-color "#6495ed"          // Cornflower blue
-        inactive-color "#808080"        // Gray
+        active-color "#d3c6aa"
+        inactive-color "#4f5b58"
     }
 
     // Drop shadow configuration
