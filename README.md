@@ -27,6 +27,9 @@ This transforms Omarchy from an *omakase* (chef's choice) to an *okimari* (pre-s
    ```bash
    curl -fsSL https://raw.githubusercontent.com/basecamp/omarchy/master/boot.sh | OMARCHY_REPO="cristian-fleischer/okimarchy" bash
    ```
+### Installing on arch derivatives
+If you want to install Okimarchy / Omarchy on Cachy OS please have a look at: https://github.com/mroboff/omarchy-on-cachyos
+For other derivatives or distros please see: https://learn.omacom.io/2/the-omarchy-manual/79/omarchy-on
 
 ---
 
